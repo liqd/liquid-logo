@@ -2,7 +2,7 @@
 // 対象パスやオプションを指定
 
 const DIR = module.exports.DIR =  {
-  PATH: '/sketch-threejs',
+  PATH: '',
   SRC: 'src',
   DEST: 'dst',
   BUILD: 'docs'
@@ -60,23 +60,9 @@ module.exports.vendorScripts = {
     `./${DIR.SRC}/js/vendor/three.js`,
     `./${DIR.SRC}/js/vendor/dat.gui.js`,
     `./${DIR.SRC}/js/vendor/stats.js`,
-    `./${DIR.SRC}/js/vendor/vue.js`,
   ],
   concat: 'vendor.js',
   dest: `./${DIR.DEST}/js/`
-};
-
-module.exports.pug = {
-  src: [
-    `${DIR.SRC}/**/*.pug`,
-    `!${DIR.SRC}/**/_**/*.pug`,
-    `!${DIR.SRC}/**/_*.pug`
-  ],
-  dest: `${DIR.DEST}`,
-  json: `${DIR.SRC}/data.json`,
-  opts: {
-    pretty: true
-  }
 };
 
 module.exports.sass = {
@@ -144,6 +130,7 @@ module.exports.copy = {
     src: [
       `${DIR.SRC}/img/**/*.*`,
       `${DIR.SRC}/font/**/*.*`,
+      `${DIR.SRC}/**/*.html`
     ],
     dest: `${DIR.DEST}`,
     opts: {
