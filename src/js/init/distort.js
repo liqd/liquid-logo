@@ -4,13 +4,12 @@ const debounce = require('js-util/debounce');
 
 export default function() {
   const glslify = require('glslify');
-  const Util = require('../modules/old/util');
   const Force2 = require('../modules/old/Force2');
   const ForceCamera = require('../modules/old/ForceCamera');
 
   const canvas = document.getElementById('canvas-webgl');
   const renderer = new THREE.WebGLRenderer({
-    antialias: true,
+    antialias: false,
     canvas: canvas,
   });
   const scene = new THREE.Scene();
@@ -71,7 +70,7 @@ export default function() {
       uniforms: {
         time: {
           type: 'f',
-          value: 0,
+          value: time_unit,
         },
         resolution: {
           type: 'v2',
@@ -140,17 +139,6 @@ export default function() {
     sub_camera.force.look.applyDrag(0.4);
     sub_camera.force.look.updateVelocity();
     sub_camera.updateLook();
-
-    framebuffer.material.uniforms.time.value += time_unit;
-    framebuffer.material.uniforms.acceleration.value = force.acceleration.length();
-    camera.force.position.applyHook(0, 0.025);
-    camera.force.position.applyDrag(0.2);
-    camera.force.position.updateVelocity();
-    camera.updatePosition();
-    camera.force.look.applyHook(0, 0.2);
-    camera.force.look.applyDrag(0.4);
-    camera.force.look.updateVelocity();
-    camera.lookAt(camera.force.look.velocity);
 
     renderer.render(sub_scene, sub_camera, render_target);
     renderer.render(scene, camera);
@@ -223,7 +211,7 @@ export default function() {
 
   const init = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xeeeeee, 1.0);
+    renderer.setClearColor(0xfbfbfb, 0);
     camera.position.set(1000, 1000, 1000);
     camera.lookAt(new THREE.Vector3());
 
