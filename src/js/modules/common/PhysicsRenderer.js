@@ -1,5 +1,6 @@
 
 const glslify = require('glslify');
+const THREE = require('three/build/three')
 
 export default class PhysicsRenderer {
   constructor(aVertexShader, aFragmentShader, vVertexShader, vFragmentShader) {

@@ -1,6 +1,7 @@
 import normalizeVector2 from '../modules/common/normalizeVector2';
 
 const debounce = require('js-util/debounce');
+const THREE = require('three/build/three')
 
 export default function() {
   const glslify = require('glslify');

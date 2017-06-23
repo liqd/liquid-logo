@@ -11,7 +11,7 @@ requireDir('./gulp/tasks');
 gulp.task('predefault', cb => {
   runSequence(
     'cleanDest',
-    ['sass', 'watchify', 'vendorScripts', 'copyToDest'],
+    ['sass', 'watchify', 'copyToDest'],
     'serve',
     cb
   );

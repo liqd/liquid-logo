@@ -55,16 +55,6 @@ module.exports.scripts = {
   dest: `${DIR.DEST}/js`
 };
 
-module.exports.vendorScripts = {
-  src: [
-    `./${DIR.SRC}/js/vendor/three.js`,
-    `./${DIR.SRC}/js/vendor/dat.gui.js`,
-    `./${DIR.SRC}/js/vendor/stats.js`,
-  ],
-  concat: 'vendor.js',
-  dest: `./${DIR.DEST}/js/`
-};
-
 module.exports.sass = {
   src: [
     `${DIR.SRC}/**/*.{sass,scss}`,
