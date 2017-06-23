@@ -1,5 +1,6 @@
-var Util = require('./util');
-var Force3 = require('./Force3');
+const Util = require('./util');
+const Force3 = require('./Force3');
+const THREE = require('three/build/three')
 
 var exports = function(){
   var ForceCamera = function(fov, aspect, near, far) {
