@@ -1,14 +1,14 @@
 import initDistort from './src/js/init/distort.js'
 
-(function (root, factory) {
+(function (root, func) {
     if (typeof define === 'function' && define.amd) {
         // AMD
-        define(['liquid-logo'], initDistort);
+        define(['liquid-logo'], func);
     } else if (typeof exports === 'object') {
         // Node, CommonJS-like
-        module.exports = initDistort;
+        module.exports = func;
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory(root.jQuery);
+        root.returnExports = func;
     }
 }(this, initDistort));

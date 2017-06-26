@@ -4,7 +4,6 @@ const debounce = require('js-util/debounce');
 const THREE = require('three/build/three')
 
 export default function() {
-  const glslify = require('glslify');
   const Force2 = require('../modules/old/Force2');
   const ForceCamera = require('../modules/old/ForceCamera');
 
@@ -56,8 +55,8 @@ export default function() {
           }
         }
       ]),
-      vertexShader: glslify('../../glsl/sketch/distort/object.vs'),
-      fragmentShader: glslify('../../glsl/sketch/distort/object.fs'),
+      vertexShader: require('../../glsl/sketch/distort/object.vs'),
+      fragmentShader: require('../../glsl/sketch/distort/object.fs'),
       lights: true,
     });
     return new THREE.Mesh(geometry, material);
@@ -86,8 +85,8 @@ export default function() {
           value: render_target,
         },
       },
-      vertexShader: glslify('../../glsl/sketch/distort/posteffect.vs'),
-      fragmentShader: glslify('../../glsl/sketch/distort/posteffect.fs'),
+      vertexShader: require('../../glsl/sketch/distort/posteffect.vs'),
+      fragmentShader: require('../../glsl/sketch/distort/posteffect.fs'),
     });
     return new THREE.Mesh(geometry, material);
   }
