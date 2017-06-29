@@ -7,14 +7,14 @@ export default function(id, options={}) {
   const Force2 = require('../modules/old/Force2');
   const ForceCamera = require('../modules/old/ForceCamera');
 
-  const { interactive = true } = options
+  let { interactive = true, width = window.innerWidth, height = window.innerHeight } = options
   const canvas = document.getElementById(id);
   const renderer = new THREE.WebGLRenderer({
     antialias: false,
     canvas: canvas,
   });
   const scene = new THREE.Scene();
-  const camera = new ForceCamera(35, window.innerWidth / window.innerHeight, 1, 10000);
+  const camera = new ForceCamera(35, width / height, 1, 10000);
   const clock = new THREE.Clock();
 
   //
@@ -23,11 +23,11 @@ export default function(id, options={}) {
   var sphere = null;
   var light = new THREE.HemisphereLight(0xffffff, 0x666666, 1);
   var sub_scene = new THREE.Scene();
-  var sub_camera = new ForceCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+  var sub_camera = new ForceCamera(45, width / height, 1, 10000);
   var sub_light = new THREE.HemisphereLight(0xffffff, 0x666666, 1);
   var force = new Force2();
   var time_unit = 0.6;
-  var render_target = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+  var render_target = new THREE.WebGLRenderTarget(width, height, {
     magFilter: THREE.NearestFilter,
     minFilter: THREE.NearestFilter,
     wrapS: THREE.ClampToEdgeWrapping,
@@ -81,7 +81,7 @@ export default function(id, options={}) {
         },
         resolution: {
           type: 'v2',
-          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+          value: new THREE.Vector2(width, height)
         },
         acceleration: {
           type: 'f',
@@ -102,7 +102,11 @@ export default function(id, options={}) {
     sphere = createSphere();
     sub_scene.add(sphere);
     sub_scene.add(sub_light);
-    sub_camera.force.position.anchor.set(1800, 1800, 0);
+    if (interactive) {
+      sub_camera.force.position.anchor.set(1800, 1800, 0);
+    } else {
+      sub_camera.force.position.anchor.set(700, 700, 0);
+    }
     sub_camera.force.look.anchor.set(0, 0, 0);
 
     framebuffer = createPlaneForPostProcess();
@@ -121,14 +125,14 @@ export default function(id, options={}) {
   // common process
   //
   const resizeWindow = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    camera.aspect = window.innerWidth / window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    render_target.setSize(window.innerWidth, window.innerHeight);
-    sub_camera.resize(window.innerWidth, window.innerHeight);
-    framebuffer.material.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
+    render_target.setSize(width, height);
+    sub_camera.resize(width, height);
+    framebuffer.material.uniforms.resolution.value.set(width, height);
   }
   const render = () => {
     force.applyHook(0, force.k);
@@ -183,9 +187,6 @@ export default function(id, options={}) {
       vectorTouchEnd.set(0, 0);
     };
 
-    window.addEventListener('resize', debounce(() => {
-      resizeWindow();
-    }), 1000);
     if (interactive) {
       canvas.addEventListener('mousedown', function (event) {
         event.preventDefault();
@@ -199,8 +200,14 @@ export default function(id, options={}) {
     sphere.material.uniforms.alpha.value = alpha
   }
 
+  const updateDimensions = ({_width, _height}) => {
+    width = _width
+    height = _height
+    resizeWindow();
+  }
+
   const init = () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
     renderer.setClearColor(0xfbfbfb);
     camera.position.set(1000, 1000, 1000);
     camera.lookAt(new THREE.Vector3());
@@ -212,5 +219,5 @@ export default function(id, options={}) {
   }
   init();
 
-  return { setAlpha }
+  return { setAlpha, updateDimensions }
 }
