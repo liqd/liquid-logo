@@ -12,28 +12,18 @@ export default function(id, options={}) {
   const renderer = new THREE.WebGLRenderer({
     antialias: false,
     canvas: canvas,
+    alpha: true
   });
-  const scene = new THREE.Scene();
-  const camera = new ForceCamera(35, width / height, 1, 10000);
-  const clock = new THREE.Clock();
 
   //
   // process for this sketch.
   //
   var sphere = null;
-  var light = new THREE.HemisphereLight(0xffffff, 0x666666, 1);
   var sub_scene = new THREE.Scene();
   var sub_camera = new ForceCamera(45, width / height, 1, 10000);
   var sub_light = new THREE.HemisphereLight(0xffffff, 0x666666, 1);
   var force = new Force2();
   var time_unit = 0.6;
-  var render_target = new THREE.WebGLRenderTarget(width, height, {
-    magFilter: THREE.NearestFilter,
-    minFilter: THREE.NearestFilter,
-    wrapS: THREE.ClampToEdgeWrapping,
-    wrapT: THREE.ClampToEdgeWrapping
-  })
-  var framebuffer = null;
   var alpha = 1.0;
 
   var createSphere = function() {
@@ -69,35 +59,6 @@ export default function(id, options={}) {
     return new THREE.Mesh(geometry, material);
   };
 
-  var createPlaneForPostProcess = function() {
-    var geometry_base = new THREE.PlaneGeometry(2, 2);
-    var geometry = new THREE.BufferGeometry();
-    geometry.fromGeometry(geometry_base);
-    var material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: {
-          type: 'f',
-          value: time_unit,
-        },
-        resolution: {
-          type: 'v2',
-          value: new THREE.Vector2(width, height)
-        },
-        acceleration: {
-          type: 'f',
-          value: 0
-        },
-        texture: {
-          type: 't',
-          value: render_target,
-        },
-      },
-      vertexShader: require('../../glsl/sketch/distort/posteffect.vs'),
-      fragmentShader: require('../../glsl/sketch/distort/posteffect.fs'),
-    });
-    return new THREE.Mesh(geometry, material);
-  }
-
   const initSketch = () => {
     sphere = createSphere();
     sub_scene.add(sphere);
@@ -109,11 +70,7 @@ export default function(id, options={}) {
     }
     sub_camera.force.look.anchor.set(0, 0, 0);
 
-    framebuffer = createPlaneForPostProcess();
-    scene.add(framebuffer);
-    scene.add(light);
-    camera.force.position.anchor.set(1800, 1800, 0);
-    camera.force.look.anchor.set(0, 0, 0);
+    //scene.add(framebuffer);
     force.anchor.set(1, 0);
     force.anchor.set(1, 0);
     force.velocity.set(1, 0);
@@ -127,12 +84,8 @@ export default function(id, options={}) {
   const resizeWindow = () => {
     canvas.width = width;
     canvas.height = height;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
     renderer.setSize(width, height);
-    render_target.setSize(width, height);
     sub_camera.resize(width, height);
-    framebuffer.material.uniforms.resolution.value.set(width, height);
   }
   const render = () => {
     force.applyHook(0, force.k);
@@ -151,8 +104,7 @@ export default function(id, options={}) {
     sub_camera.force.look.updateVelocity();
     sub_camera.updateLook();
 
-    renderer.render(sub_scene, sub_camera, render_target);
-    renderer.render(scene, camera);
+    renderer.render(sub_scene, sub_camera);
   }
   const renderLoop = () => {
     render();
@@ -208,9 +160,7 @@ export default function(id, options={}) {
 
   const init = () => {
     renderer.setSize(width, height);
-    renderer.setClearColor(0xfbfbfb);
-    camera.position.set(1000, 1000, 1000);
-    camera.lookAt(new THREE.Vector3());
+    renderer.setClearColor(0xfbfbfb, 0.0);
 
     on();
     initSketch();
