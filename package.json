@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "glsl-noise": "0.0.0",
-    "three": "0.148.0"
+    "three": "0.149.0"
   },
   "peerDependencies": {
     "glslify-loader": "2.0.0",
