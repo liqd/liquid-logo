@@ -13,7 +13,7 @@ export default function (id, options = {}) {
     height = () => window.innerHeight,
   } = options
   const canvas = document.getElementById(id)
-  const renderer = new THREE.WebGL1Renderer({
+  const renderer = new THREE.WebGLRenderer({
     antialias: false,
     canvas: canvas,
     alpha: true,
