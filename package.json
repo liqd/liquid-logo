@@ -14,7 +14,7 @@
     "node": ">=16.x"
   },
   "devDependencies": {
-    "eslint": "8.57.1",
+    "eslint": "10.0.2",
     "glslify-loader": "2.0.0",
     "raw-loader": "4.0.2",
     "webpack": "5.105.2",
